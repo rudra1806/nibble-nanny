@@ -1,0 +1,54 @@
+{
+  "profile_id": "low_sugar",
+  "friend_name": "Priya",
+  "nanny_title": "Sugar Nanny",
+  "tagline": "The Glucose Guardian",
+  "avatar_emoji": "🍬",
+  "what_it_is_for": "Monitors blood sugar spikes, whole-pack sugar loads, and unmasks 30+ industrial sweeteners.",
+  "voice_quote": "Maltodextrin can run, but it can't hide.",
+  "rule_type": "both",
+  "limits": {
+    "sugar_per_serving_max_g": 10.0,
+    "sugar_per_pack_max_g": 25.0,
+    "sugar_per_100g_max_g": 15.0,
+    "sugar_warning_serving_g": 7.0
+  },
+  "ingredient_rules": {
+    "banned_exact": [
+      "high fructose corn syrup",
+      "corn syrup",
+      "glucose-fructose syrup",
+      "isoglucose",
+      "maltodextrin",
+      "invert sugar",
+      "dextrose",
+      "maltose",
+      "corn syrup solids",
+      "golden syrup",
+      "liquid glucose"
+    ],
+    "ambiguous": [
+      "fruit juice concentrate",
+      "concentrated fruit juice",
+      "apple juice concentrate",
+      "grape juice concentrate",
+      "date syrup",
+      "date paste",
+      "honey",
+      "molasses",
+      "jaggery",
+      "gur",
+      "brown sugar",
+      "raw sugar",
+      "caramel",
+      "aspartame",
+      "sucralose",
+      "acesulfame potassium"
+    ],
+    "allowed_exceptions": [
+      "stevia",
+      "monk fruit",
+      "erythritol"
+    ]
+  }
+}

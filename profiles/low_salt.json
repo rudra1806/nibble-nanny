@@ -1,0 +1,39 @@
+{
+  "profile_id": "low_salt",
+  "friend_name": "Rahul",
+  "nanny_title": "Salt Nanny",
+  "tagline": "The Sodium Sentry",
+  "avatar_emoji": "🧂",
+  "what_it_is_for": "Guards against hypertension and deceptive salt-to-sodium conversion ratios.",
+  "voice_quote": "Converting grams of salt to milligrams of doom.",
+  "rule_type": "both",
+  "limits": {
+    "sodium_per_serving_max_mg": 400.0,
+    "sodium_per_pack_max_mg": 1000.0,
+    "sodium_per_100g_max_mg": 600.0,
+    "sodium_warning_serving_mg": 250.0
+  },
+  "ingredient_rules": {
+    "banned_exact": [
+      "monosodium glutamate",
+      "msg",
+      "disodium inosinate",
+      "disodium guanylate",
+      "sodium nitrite",
+      "sodium nitrate"
+    ],
+    "ambiguous": [
+      "yeast extract",
+      "hydrolyzed vegetable protein",
+      "hvp",
+      "soy sauce powder",
+      "sodium bicarbonate",
+      "baking soda",
+      "disodium phosphate",
+      "sodium benzoate"
+    ],
+    "allowed_exceptions": [
+      "potassium chloride"
+    ]
+  }
+}
