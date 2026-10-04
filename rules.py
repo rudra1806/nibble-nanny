@@ -127,28 +127,58 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
     ambiguous_terms = ing_rules.get("ambiguous", [])
     allowed_exceptions = ing_rules.get("allowed_exceptions", [])
 
+    # Track unique banned ingredient names (deduplicated)
+    _banned_names = set()  # unique clean names for dedup
+    _banned_display = []   # clean display items
+
     # Check Allergen statement first
     for b in banned_terms:
         if b in allergen_info:
-            found_banned.append(f"Allergen statement mentions '{b}'")
+            clean_name = b.strip().title()
+            if clean_name not in _banned_names:
+                _banned_names.add(clean_name)
+                _banned_display.append(clean_name)
+                found_banned.append(f"Allergen statement mentions '{b}'")
 
-    # Check Ingredient list
+    # Check Ingredient list — deduplicate by keeping the most specific match
+    _ing_matched_terms = {}  # ingredient -> set of matched banned terms
     for ing in ingredients:
         # Skip if explicitly in allowed exceptions
         if any(exc in ing for exc in allowed_exceptions):
             continue
 
+        matched_banned = []
         for b in banned_terms:
             if check_term_match(b, ing):
-                match_str = f"{ing} (matches banned '{b}')"
-                if match_str not in found_banned:
-                    found_banned.append(match_str)
+                matched_banned.append(b)
+
+        if matched_banned:
+            # Keep only the longest/most-specific term to avoid "garlic" AND "garlic powder"
+            matched_banned.sort(key=len, reverse=True)
+            best_term = matched_banned[0]
+            clean_name = best_term.strip().title()
+            if clean_name not in _banned_names:
+                _banned_names.add(clean_name)
+                _banned_display.append(clean_name)
+                found_banned.append(f"{ing} (matches banned '{best_term}')")
+
+    # Check ambiguous terms
+    _amb_names = set()
+    _amb_display = []
+    for ing in ingredients:
+        if any(exc in ing for exc in allowed_exceptions):
+            continue
+        # Skip if already caught as banned
+        if any(check_term_match(b, ing) for b in banned_terms):
+            continue
 
         for a in ambiguous_terms:
             if check_term_match(a, ing):
-                match_str = f"{ing} (ambiguous source: '{a}')"
-                if match_str not in found_ambiguous and not any(ing in fb for fb in found_banned):
-                    found_ambiguous.append(match_str)
+                clean_name = a.strip().title()
+                if clean_name not in _amb_names:
+                    _amb_names.add(clean_name)
+                    _amb_display.append(clean_name)
+                    found_ambiguous.append(f"{ing} (ambiguous source: '{a}')")
 
     # 1. 🥛 Dairy Nanny (Sneha)
     if p_id == "no_dairy":
@@ -163,7 +193,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
                 status_emoji="❌",
                 summary_line=f"❌ SKIP — Dairy detected! Lactose alert level: RED.",
                 voice_note="Sneha, step away from the packet! Milk derivatives detected.",
-                reasons=[f"Contains dairy ingredients: {', '.join(found_banned)}"],
+                reasons=[f"Contains dairy: {', '.join(_banned_display)}"],
                 found_banned=found_banned,
                 found_ambiguous=found_ambiguous,
             )
@@ -178,7 +208,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
                 status_emoji="⚠️",
                 summary_line=f"⚠️ CAREFUL — Ambiguous flavoring or dairy derivatives.",
                 voice_note="Could contain hidden dairy in flavourings. Check with manufacturer.",
-                reasons=[f"Ambiguous ingredients detected: {', '.join(found_ambiguous)}"],
+                reasons=[f"Ambiguous dairy-source ingredients: {', '.join(_amb_display)}"],
                 found_banned=found_banned,
                 found_ambiguous=found_ambiguous,
             )
@@ -229,7 +259,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
             if is_pack_excess:
                 causes.append(f"Whole pack sugar ({sugar_pack}g) exceeds pack cap ({max_pack_g}g)")
             if has_hidden_spikers:
-                causes.append(f"High-glycemic covert sugars present: {', '.join(found_banned)}")
+                causes.append(f"High-glycemic covert sugars: {', '.join(_banned_display)}")
 
             return Verdict(
                 profile_id=p_id,
@@ -252,9 +282,9 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
             if is_serving_close:
                 warnings.append(f"Sugar per serving ({sugar_serving}g) is near the caution zone ({warning_serving_g}g+)")
             if has_hidden_spikers:
-                warnings.append(f"Contains covert high-GI sweetener: {', '.join(found_banned)}")
+                warnings.append(f"Contains covert high-GI sweetener: {', '.join(_banned_display)}")
             if found_ambiguous:
-                warnings.append(f"Contains concentrated sweeteners: {', '.join(found_ambiguous)}")
+                warnings.append(f"Contains concentrated sweeteners: {', '.join(_amb_display)}")
 
             return Verdict(
                 profile_id=p_id,
@@ -317,7 +347,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
             if is_pack_excess:
                 causes.append(f"Whole pack sodium ({sodium_pack}mg) exceeds danger limit ({max_pack_mg}mg)")
             if found_banned:
-                causes.append(f"Contains synthetic sodium enhancers: {', '.join(found_banned)}")
+                causes.append(f"Contains synthetic sodium enhancers: {', '.join(_banned_display)}")
 
             return Verdict(
                 profile_id=p_id,
@@ -340,7 +370,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
             if is_serving_close:
                 warnings.append(f"Sodium per serving ({sodium_serving}mg) is near caution limit ({warning_serving_mg}mg)")
             if found_ambiguous:
-                warnings.append(f"Hidden sodium source detected: {', '.join(found_ambiguous)}")
+                warnings.append(f"Hidden sodium source: {', '.join(_amb_display)}")
 
             return Verdict(
                 profile_id=p_id,
@@ -394,7 +424,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
                 status_emoji="❌",
                 summary_line=f"❌ SKIP — Violates Jain purity or vegetarian guidelines.",
                 voice_note="Amit, don't eat this! Animal derivatives or root ingredients found.",
-                reasons=[f"Prohibited ingredients found: {', '.join(found_banned)}"],
+                reasons=[f"Prohibited ingredients: {', '.join(_banned_display)}"],
                 found_banned=found_banned,
                 found_ambiguous=found_ambiguous,
             )
@@ -402,7 +432,7 @@ def evaluate_profile(profile: Dict[str, Any], extracted: Dict[str, Any], validat
         if found_ambiguous or is_veg_marked is False:
             warnings = []
             if found_ambiguous:
-                warnings.append(f"Ambiguous animal/plant additives: {', '.join(found_ambiguous)}")
+                warnings.append(f"Ambiguous animal/plant additives: {', '.join(_amb_display)}")
             if is_veg_marked is False:
                 warnings.append("Green vegetarian dot was not confirmed on packaging")
 

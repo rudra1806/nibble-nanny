@@ -27,7 +27,7 @@
       </div>
       <div class="header-right">
         <span class="tagline-pill">Build for a Friend</span>
-        <span class="tagline-pill gemma-pill">💎 Google Gemma Open AI</span>
+        <span class="tagline-pill gemma-pill">💎 Gemma Open AI</span>
         <button id="themeToggle" class="icon-btn" aria-label="Toggle Dark/Light Mode">
           <span id="themeIcon">🌙</span>
         </button>
@@ -50,11 +50,10 @@
       <!-- Quick Sample Packets Runner -->
       <div class="samples-card">
         <div class="samples-header">
-          <span class="samples-title">⚡ Try Instant Test Packets (1-Click Demo)</span>
-          <span class="samples-sub">No camera needed to test!</span>
+          <span class="samples-title">⚡ Try Instant Test Packets</span>
+          <span class="samples-sub">No camera needed — 1-click demo!</span>
         </div>
         <div id="samplesList" class="samples-grid">
-          <!-- Dynamically populated sample buttons -->
           <div class="sample-skeleton">Loading snack presets...</div>
         </div>
       </div>
@@ -89,7 +88,7 @@
     <!-- Loading State -->
     <section id="loadingSection" class="loading-section hidden" aria-live="polite">
       <div class="loading-spinner"></div>
-      <h3 id="loadingText" class="loading-title">Scanning with Gemma 3 Vision...</h3>
+      <h3 id="loadingText" class="loading-title">Scanning with Gemma Vision...</h3>
       <p class="loading-subtext">Running Atwater energy cross-checks & checking the Nibble Nanny Squad rules</p>
     </section>
 
@@ -119,15 +118,21 @@
         </div>
       </div>
 
-      <!-- HERO MATRIX: THE NIBBLE NANNY SQUAD VERDICTS -->
+      <!-- QUICK VERDICT OVERVIEW — At-a-glance status for all 4 friends -->
       <div class="section-block">
         <div class="section-title-row">
           <h3 class="section-heading">
-            <span class="icon">🦸‍♀️</span> The Nibble Nanny Squad Verdicts
+            <span class="icon">🦸‍♀️</span> Squad Verdicts
           </h3>
-          <span class="section-sub">One photo evaluated for 4 distinct dietary requirements</span>
+          <span class="section-sub">One photo evaluated for 4 dietary needs</span>
         </div>
 
+        <!-- Quick Overview Strip -->
+        <div id="quickOverview" class="quick-overview">
+          <!-- Dynamically populated quick verdict pills -->
+        </div>
+
+        <!-- Detailed Verdict Cards -->
         <div id="verdictsGrid" class="verdicts-grid">
           <!-- Dynamically populated 4 Squad Cards -->
         </div>
@@ -137,9 +142,9 @@
       <div class="section-block watchdog-block">
         <div class="section-title-row">
           <h3 class="section-heading">
-            <span class="icon">🕵️‍♀️</span> Nanny Noir's Corporate Deception Radar
+            <span class="icon">🕵️‍♀️</span> Deception Radar
           </h3>
-          <span class="section-sub">12 deterministic checks exposing marketing traps, hidden sugars, & chemical cocktails</span>
+          <span class="section-sub">12 checks exposing marketing traps & chemical cocktails</span>
         </div>
 
         <div id="tricksList" class="tricks-list">
@@ -151,17 +156,17 @@
       <div class="section-block">
         <div class="section-title-row">
           <h3 class="section-heading">
-            <span class="icon">📚</span> The Ingredient Classroom
+            <span class="icon">📚</span> Ingredient Classroom
           </h3>
-          <span class="section-sub">What each ingredient is and what it actually does to your body</span>
+          <span class="section-sub">What each ingredient is and what it does to your body</span>
         </div>
 
         <!-- Color Legend -->
         <div class="ingredient-legend">
-          <span class="legend-item"><span class="dot dot-red"></span> Red = Banned for Profile</span>
-          <span class="legend-item"><span class="dot dot-yellow"></span> Yellow = Caution / Ambiguous</span>
-          <span class="legend-item"><span class="dot dot-green"></span> Green = Safe / Nutrient</span>
-          <span class="legend-item"><span class="dot dot-neutral"></span> White = General Info</span>
+          <span class="legend-item"><span class="dot dot-red"></span> Banned</span>
+          <span class="legend-item"><span class="dot dot-yellow"></span> Caution</span>
+          <span class="legend-item"><span class="dot dot-green"></span> Safe</span>
+          <span class="legend-item"><span class="dot dot-neutral"></span> General</span>
         </div>
 
         <div id="educationList" class="education-grid">
@@ -173,7 +178,7 @@
       <div class="section-block">
         <details class="trust-gate-details">
           <summary class="trust-gate-summary">
-            <span>🛡️ View Trust Gate Math & Raw Nutrition Data</span>
+            <span>🛡️ Trust Gate Math & Nutrition Data</span>
             <span class="chevron">▼</span>
           </summary>
           <div class="trust-gate-content">
@@ -183,7 +188,7 @@
                 <thead>
                   <tr>
                     <th>Nutrient</th>
-                    <th>Per 100g / 100ml</th>
+                    <th>Per 100g</th>
                     <th>Per Serving</th>
                     <th>Whole Pack</th>
                   </tr>
@@ -201,7 +206,7 @@
       <div class="disclaimer-card">
         <span class="disclaimer-icon">ℹ️</span>
         <p>
-          <strong>Nibble Nanny Medical & Safety Disclaimer:</strong> Nibble Nanny is an open-source consumer advocacy and educational companion created for the Hacktoberfest Weekend Challenge. It does not replace certified professional medical advice, clinical allergy testing, or manufacturer allergen certifications. Always verify with manufacturer hotlines for anaphylactic allergies.
+          <strong>Disclaimer:</strong> Nibble Nanny is an open-source educational companion for Hacktoberfest. It does not replace professional medical advice or clinical allergy testing. Always verify with manufacturers for anaphylactic allergies.
         </p>
       </div>
     </section>

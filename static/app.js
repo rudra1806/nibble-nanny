@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sourcePill = document.getElementById("sourcePill");
   const rescanBtn = document.getElementById("rescanBtn");
 
+  const quickOverview = document.getElementById("quickOverview");
   const verdictsGrid = document.getElementById("verdictsGrid");
   const tricksList = document.getElementById("tricksList");
   const educationList = document.getElementById("educationList");
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function runSample(sampleId) {
-    showLoading("Testing sample packet...", "Running deterministic Atwater verification & evaluating rules");
+    showLoading("Testing sample packet...", "Running Atwater verification & evaluating rules");
     hideError();
 
     try {
@@ -254,18 +255,36 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sourcePill) {
       if (data.source) {
         const isGemma = data.source.toLowerCase().includes("gemma");
-        sourcePill.textContent = isGemma ? "💎 Google Gemma Open AI" : "⚡ Cloud Vision Engine";
+        sourcePill.textContent = isGemma ? "💎 Google Gemma" : "⚡ Vision Engine";
         sourcePill.style.display = "inline-flex";
       } else {
         sourcePill.style.display = "none";
       }
     }
 
-    // 2. HERO MATRIX: Render The Nibble Nanny Squad Cards
-    verdictsGrid.innerHTML = "";
+    // 2. QUICK OVERVIEW — At-a-glance strip
+    quickOverview.innerHTML = "";
     const verdicts = data.verdicts || {};
-
     const profileOrder = ["no_dairy", "low_sugar", "low_salt", "jain_veg"];
+
+    profileOrder.forEach(pid => {
+      const v = verdicts[pid];
+      if (!v) return;
+
+      const statusClass = `status-${v.status.toLowerCase().replace('_', '')}`;
+      const pill = document.createElement("div");
+      pill.className = `quick-pill ${statusClass}`;
+      pill.innerHTML = `
+        <span class="qp-emoji">${v.avatar_emoji || '🍪'}</span>
+        <span class="qp-name">${v.friend_name}</span>
+        <span class="qp-badge">${v.status_emoji} ${v.status.replace('_', ' ')}</span>
+      `;
+      quickOverview.appendChild(pill);
+    });
+
+    // 3. DETAILED VERDICT CARDS
+    verdictsGrid.innerHTML = "";
+
     profileOrder.forEach(pid => {
       const v = verdicts[pid];
       if (!v) return;
@@ -274,15 +293,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const statusClass = `status-${v.status.toLowerCase().replace('_', '')}`;
       card.className = `squad-card ${statusClass}`;
 
+      // Build clean reasons as separate items
       let reasonsHtml = "";
       (v.reasons || []).forEach(r => {
-        reasonsHtml += `
-          <li class="reason-item">
-            <span class="reason-bullet" aria-hidden="true"></span>
-            <span class="reason-text">${r}</span>
-          </li>`;
+        reasonsHtml += `<li class="reason-item"><span class="reason-text">${r}</span></li>`;
       });
 
+      // Format math details
       let mathSummary = "";
       if (v.math_details && typeof v.math_details === "object" && Object.keys(v.math_details).length > 0) {
         if (v.math_details.sugar_per_serving_g !== undefined && v.math_details.sugar_per_serving_g !== null) {
@@ -307,48 +324,52 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>` : "";
 
       card.innerHTML = `
-        <div class="card-header">
-          <div class="squad-identity">
-            <div class="squad-emoji-box" aria-hidden="true">${v.avatar_emoji || '🍪'}</div>
-            <div class="squad-titles">
-              <h4 class="squad-name">${v.nanny_title}</h4>
-              <div class="squad-for-friend">For <strong>${v.friend_name}</strong> · ${v.tagline}</div>
+        <div class="card-top">
+          <div class="card-header">
+            <div class="squad-identity">
+              <div class="squad-emoji-box" aria-hidden="true">${v.avatar_emoji || '🍪'}</div>
+              <div class="squad-titles">
+                <h4 class="squad-name">${v.nanny_title}</h4>
+                <div class="squad-for-friend">For <strong>${v.friend_name}</strong> · ${v.tagline}</div>
+              </div>
             </div>
-          </div>
-          <div class="status-badge-container">
             <span class="status-badge ${statusClass}">
               <span class="status-badge-icon">${v.status_emoji}</span>
               <span class="status-badge-text">${v.status.replace('_', ' ')}</span>
             </span>
           </div>
-        </div>
 
-        <div class="voice-bubble">
-          <span class="quote-symbol">“</span>
-          <p class="quote-text">${v.voice_note || v.summary_line}</p>
+          <div class="voice-bubble">
+            <p class="quote-text">${v.voice_note || v.summary_line}</p>
+          </div>
         </div>
 
         ${mathHtml}
 
-        <div class="card-reasons-wrapper">
-          <span class="reasons-heading">Nutrition & Health Evaluation:</span>
-          <ul class="card-reasons">
-            ${reasonsHtml}
-          </ul>
-        </div>
+        <details class="card-details">
+          <summary class="details-toggle">
+            <span>View Details</span>
+            <span class="details-chevron">▾</span>
+          </summary>
+          <div class="details-content">
+            <ul class="card-reasons">
+              ${reasonsHtml}
+            </ul>
+          </div>
+        </details>
       `;
 
       verdictsGrid.appendChild(card);
     });
 
-    // 3. WATCHDOG: Render Nanny Noir Trick Radar
+    // 4. WATCHDOG: Render Nanny Noir Trick Radar
     tricksList.innerHTML = "";
     const tricks = data.tricks || [];
 
     if (tricks.length === 0) {
       tricksList.innerHTML = `
         <div class="no-tricks-card">
-          🛡️ No deceptive marketing tricks or dangerous chemical cocktails detected on this label!
+          🛡️ No deceptive marketing tricks or dangerous chemical cocktails detected!
         </div>
       `;
     } else {
@@ -356,35 +377,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const item = document.createElement("div");
         item.className = `trick-item severity-${t.severity}`;
 
-        let sevLabel = "INFO ADVISORY";
+        let sevLabel = "INFO";
         let sevIcon = "ℹ️";
         if (t.severity === "critical") {
-          sevLabel = "CRITICAL DECEPTION";
+          sevLabel = "CRITICAL";
           sevIcon = "🚨";
         } else if (t.severity === "warning") {
-          sevLabel = "LABEL WARNING";
+          sevLabel = "WARNING";
           sevIcon = "⚠️";
         }
 
         item.innerHTML = `
-          <div class="trick-badge-row">
-            <span class="trick-emoji">${t.emoji || sevIcon}</span>
-            <span class="trick-severity-pill severity-${t.severity}">${sevLabel}</span>
-          </div>
-          <div class="trick-content">
-            <h4 class="trick-title">${t.title}</h4>
-            <p class="trick-explanation">${t.explanation}</p>
-            <div class="trick-impact-box">
-              <span class="impact-badge">💡 What It Means For You</span>
-              <p class="impact-text">${t.impact}</p>
+          <div class="trick-header-row">
+            <div class="trick-badge-row">
+              <span class="trick-emoji">${t.emoji || sevIcon}</span>
+              <span class="trick-severity-pill severity-${t.severity}">${sevLabel}</span>
             </div>
+            <h4 class="trick-title">${t.title}</h4>
+          </div>
+          <p class="trick-explanation">${t.explanation}</p>
+          <div class="trick-impact-box">
+            <span class="impact-label">💡 Impact:</span>
+            <span class="impact-text">${t.impact}</span>
           </div>
         `;
         tricksList.appendChild(item);
       });
     }
 
-    // 4. TEACHER: Render The Ingredient Classroom
+    // 5. TEACHER: Render The Ingredient Classroom
     educationList.innerHTML = "";
     const eduItems = data.education || [];
 
@@ -392,23 +413,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = `ingredient-card color-${item.color}`;
 
-      let statusText = "Safe & Beneficial";
+      let statusText = "Safe";
       let statusClass = "badge-safe";
       if (item.color === "red") {
-        statusText = "Restricted / Banned";
+        statusText = "Banned";
         statusClass = "badge-danger";
       } else if (item.color === "yellow") {
-        statusText = "Use Caution";
+        statusText = "Caution";
         statusClass = "badge-warning";
       } else if (item.color === "neutral") {
-        statusText = "General Food Base";
+        statusText = "General";
         statusClass = "badge-neutral";
       }
 
       let noteHtml = item.nanny_note ? `
         <div class="ing-nanny-note">
           <span class="nanny-note-icon">👩‍🏫</span>
-          <div class="nanny-note-text"><strong>Nanny's Note:</strong> ${item.nanny_note}</div>
+          <span class="nanny-note-text">${item.nanny_note}</span>
         </div>` : "";
 
       card.innerHTML = `
@@ -420,38 +441,39 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="ing-status-pill ${statusClass}">${statusText}</span>
         </div>
 
-        <div class="ing-category-row">
-          <span class="ing-category-badge">${item.category.replace(/_/g, ' ')}</span>
-        </div>
-
-        <div class="ing-details">
-          <div class="ing-detail-block">
-            <span class="detail-label">What it is:</span>
-            <p class="detail-value">${item.what}</p>
+        <details class="ing-details-toggle">
+          <summary class="ing-summary">
+            <span class="ing-category-badge">${item.category.replace(/_/g, ' ')}</span>
+            <span class="ing-expand-hint">tap to learn more ▾</span>
+          </summary>
+          <div class="ing-details">
+            <div class="ing-detail-block">
+              <span class="detail-label">What it is</span>
+              <p class="detail-value">${item.what}</p>
+            </div>
+            <div class="ing-detail-block">
+              <span class="detail-label">Health Impact</span>
+              <p class="detail-value">${item.health}</p>
+            </div>
+            ${noteHtml}
           </div>
-          <div class="ing-detail-block">
-            <span class="detail-label">Health & Body Impact:</span>
-            <p class="detail-value">${item.health}</p>
-          </div>
-        </div>
-
-        ${noteHtml}
+        </details>
       `;
       educationList.appendChild(card);
     });
 
-    // 5. TRUST GATE: Render Math & Nutrition Table
+    // 6. TRUST GATE: Render Math & Nutrition Table
     const val = data.validation || {};
     if (val.trusted) {
       trustGateStatus.className = "trust-status-box trusted";
       trustGateStatus.innerHTML = `
-        <strong>✅ Mathematical Trust Gate: PASSED</strong><br>
-        Stated energy (${val.normalized_per_100g?.energy_kcal || 0} kcal) verified against macronutrient Atwater formula (4C+4P+9F+2Fiber).
+        <strong>✅ Trust Gate: PASSED</strong><br>
+        Energy (${val.normalized_per_100g?.energy_kcal || 0} kcal) verified via Atwater formula.
       `;
     } else {
       trustGateStatus.className = "trust-status-box untrusted";
       trustGateStatus.innerHTML = `
-        <strong>⚠️ Mathematical Trust Gate: WARNINGS / ERRORS</strong><br>
+        <strong>⚠️ Trust Gate: WARNINGS</strong><br>
         ${(val.errors || []).join("<br>") || (val.warnings || []).join("<br>")}
       `;
     }
@@ -459,14 +481,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Populate Nutrition Table
     nutritionTableBody.innerHTML = "";
     const nutrients = [
-      { key: "energy_kcal", label: "Energy (kcal)", unit: "kcal" },
-      { key: "carbohydrates_g", label: "Carbohydrates", unit: "g" },
-      { key: "sugar_g", label: "of which Sugars", unit: "g" },
+      { key: "energy_kcal", label: "Energy", unit: "kcal" },
+      { key: "carbohydrates_g", label: "Carbs", unit: "g" },
+      { key: "sugar_g", label: "Sugars", unit: "g" },
       { key: "protein_g", label: "Protein", unit: "g" },
       { key: "fat_g", label: "Total Fat", unit: "g" },
-      { key: "saturated_fat_g", label: "Saturated Fat", unit: "g" },
+      { key: "saturated_fat_g", label: "Sat. Fat", unit: "g" },
       { key: "trans_fat_g", label: "Trans Fat", unit: "g" },
-      { key: "fibre_g", label: "Dietary Fibre", unit: "g" },
+      { key: "fibre_g", label: "Fibre", unit: "g" },
       { key: "sodium_mg", label: "Sodium", unit: "mg" },
     ];
 
