@@ -1,0 +1,256 @@
+[
+  {
+    "id": "parle_g",
+    "name": "Parle-G Glucose Biscuits",
+    "category": "Biscuits / Cookies",
+    "image_hint": "Iconic yellow-red packet with Parle girl",
+    "data": {
+      "product_name": "Parle-G Gold Glucose Biscuits",
+      "table_found": true,
+      "serving_size": {"value": 25.0, "unit": "g"},
+      "servings_per_pack": 4.0,
+      "pack_size": {"value": 100.0, "unit": "g"},
+      "nutrition": {
+        "energy_kcal": 454.0,
+        "protein_g": 6.7,
+        "carbohydrates_g": 78.2,
+        "sugar_g": 26.3,
+        "fat_g": 12.8,
+        "saturated_fat_g": 6.2,
+        "trans_fat_g": 0.0,
+        "fibre_g": 1.5,
+        "sodium_mg": 280.0
+      },
+      "nutrition_basis": "per_100g",
+      "ingredients_raw": "Refined Wheat Flour (Maida) 65%, Sugar, Edible Vegetable Oil (Palm Oil), Invert Sugar Syrup 3%, Milk Solids 1%, Raising Agents [503(ii), 500(ii)], Salt, Emulsifier [322], Dough Conditioner [223]",
+      "ingredients_list": [
+        "refined wheat flour",
+        "sugar",
+        "edible vegetable oil (palm oil)",
+        "invert sugar syrup",
+        "milk solids",
+        "raising agents (503ii, 500ii)",
+        "salt",
+        "emulsifier (322)",
+        "dough conditioner (223)"
+      ],
+      "allergen_info": "Contains: Wheat, Milk and Soy.",
+      "is_vegetarian_marked": true,
+      "is_nonveg_marked": false,
+      "multiple_tables": false,
+      "confidence_notes": []
+    }
+  },
+  {
+    "id": "maggi_noodles",
+    "name": "Maggi 2-Minute Masala Noodles",
+    "category": "Instant Noodles",
+    "image_hint": "Bright yellow packet with red Maggi logo",
+    "data": {
+      "product_name": "Maggi 2-Minute Masala Instant Noodles",
+      "table_found": true,
+      "serving_size": {"value": 70.0, "unit": "g"},
+      "servings_per_pack": 1.0,
+      "pack_size": {"value": 70.0, "unit": "g"},
+      "nutrition": {
+        "energy_kcal": 312.0,
+        "protein_g": 6.8,
+        "carbohydrates_g": 43.4,
+        "sugar_g": 1.8,
+        "fat_g": 12.4,
+        "saturated_fat_g": 5.8,
+        "trans_fat_g": 0.1,
+        "fibre_g": 2.5,
+        "sodium_mg": 860.0
+      },
+      "nutrition_basis": "per_serving",
+      "ingredients_raw": "Noodles: Refined wheat flour (Maida), Palm oil, Salt, Wheat gluten, Mineral (Calcium carbonate), Thickeners (508, 412). Masala Tastemaker: Hydrolysed groundnut protein, Mixed spices (Onion powder, Coriander, Chili, Turmeric, Garlic powder, Cumin), Noodle powder, Sugar, Edible starch, Palm oil, Thickener (508), Caramel salt mix, Flavor enhancer (635), Acidity regulator (330)",
+      "ingredients_list": [
+        "refined wheat flour",
+        "palm oil",
+        "salt",
+        "wheat gluten",
+        "calcium carbonate",
+        "hydrolysed groundnut protein",
+        "onion powder",
+        "garlic powder",
+        "chili powder",
+        "turmeric",
+        "coriander",
+        "sugar",
+        "flavor enhancer (635)",
+        "citric acid"
+      ],
+      "allergen_info": "May contain: Milk solids, Mustard and Soya.",
+      "is_vegetarian_marked": true,
+      "is_nonveg_marked": false,
+      "multiple_tables": true,
+      "confidence_notes": ["Combined noodle and tastemaker table analyzed"]
+    }
+  },
+  {
+    "id": "protein_bar",
+    "name": "Choco Crunch 'High Protein' Bar",
+    "category": "Sports Nutrition / Protein",
+    "image_hint": "Metallic foil bar advertising 20g Protein and Energy",
+    "data": {
+      "product_name": "Choco Max High Protein Energy Bar",
+      "table_found": true,
+      "serving_size": {"value": 50.0, "unit": "g"},
+      "servings_per_pack": 1.0,
+      "pack_size": {"value": 50.0, "unit": "g"},
+      "nutrition": {
+        "energy_kcal": 210.0,
+        "protein_g": 10.0,
+        "carbohydrates_g": 28.0,
+        "sugar_g": 18.0,
+        "fat_g": 6.0,
+        "saturated_fat_g": 3.0,
+        "trans_fat_g": 0.0,
+        "fibre_g": 3.0,
+        "sodium_mg": 140.0
+      },
+      "nutrition_basis": "per_serving",
+      "ingredients_raw": "Protein blend (Whey protein concentrate, Calcium caseinate), Corn syrup, Maltodextrin, Milk chocolate coating (Sugar, Cocoa butter, Milk solids), Invert sugar, Soy lecithin, Natural flavor",
+      "ingredients_list": [
+        "whey protein concentrate",
+        "calcium caseinate",
+        "corn syrup",
+        "maltodextrin",
+        "sugar",
+        "cocoa butter",
+        "milk solids",
+        "invert sugar",
+        "soy lecithin",
+        "natural flavor"
+      ],
+      "allergen_info": "Contains: Milk, Soy. Manufactured in a facility that processes nuts.",
+      "is_vegetarian_marked": true,
+      "is_nonveg_marked": false,
+      "multiple_tables": false,
+      "confidence_notes": []
+    }
+  },
+  {
+    "id": "orange_fruit_drink",
+    "name": "Citrus Splash Orange Beverage",
+    "category": "Beverages",
+    "image_hint": "Plastic orange drink bottle claiming real fruit juice",
+    "data": {
+      "product_name": "Citrus Splash Natural Orange Cooler",
+      "table_found": true,
+      "serving_size": {"value": 200.0, "unit": "ml"},
+      "servings_per_pack": 1.0,
+      "pack_size": {"value": 200.0, "unit": "ml"},
+      "nutrition": {
+        "energy_kcal": 96.0,
+        "protein_g": 0.0,
+        "carbohydrates_g": 24.0,
+        "sugar_g": 23.5,
+        "fat_g": 0.0,
+        "saturated_fat_g": 0.0,
+        "trans_fat_g": 0.0,
+        "fibre_g": 0.0,
+        "sodium_mg": 75.0
+      },
+      "nutrition_basis": "per_serving",
+      "ingredients_raw": "Water, Sugar, Reconstituted Orange Juice Concentrate (5%), Acidity Regulator (Citric acid - E330), Preservative (Sodium Benzoate - E211), Antioxidant (Ascorbic acid - E300 / Vitamin C), Color (Sunset Yellow - E110)",
+      "ingredients_list": [
+        "water",
+        "sugar",
+        "orange juice concentrate",
+        "citric acid",
+        "sodium benzoate",
+        "ascorbic acid",
+        "sunset yellow"
+      ],
+      "allergen_info": null,
+      "is_vegetarian_marked": true,
+      "is_nonveg_marked": false,
+      "multiple_tables": false,
+      "confidence_notes": []
+    }
+  },
+  {
+    "id": "bakery_rusk",
+    "name": "Golden Premium Toast Rusk",
+    "category": "Bakery / Toast",
+    "image_hint": "Clear plastic pack of double-baked crunchy tea rusks",
+    "data": {
+      "product_name": "Golden Premium Crunchy Tea Toast Rusk",
+      "table_found": true,
+      "serving_size": {"value": 30.0, "unit": "g"},
+      "servings_per_pack": 7.0,
+      "pack_size": {"value": 210.0, "unit": "g"},
+      "nutrition": {
+        "energy_kcal": 435.0,
+        "protein_g": 8.5,
+        "carbohydrates_g": 76.0,
+        "sugar_g": 22.0,
+        "fat_g": 10.5,
+        "saturated_fat_g": 4.8,
+        "trans_fat_g": 0.0,
+        "fibre_g": 2.0,
+        "sodium_mg": 210.0
+      },
+      "nutrition_basis": "per_100g",
+      "ingredients_raw": "Wheat Flour (Maida), Sugar, Hydrogenated Vegetable Fat (Vanaspati), Semolina (Suji), Yeast, Invert Sugar, Salt, Cardamom, Wheat Gluten",
+      "ingredients_list": [
+        "wheat flour",
+        "sugar",
+        "hydrogenated vegetable fat",
+        "semolina",
+        "yeast",
+        "invert sugar",
+        "salt",
+        "cardamom",
+        "wheat gluten"
+      ],
+      "allergen_info": "Contains wheat gluten.",
+      "is_vegetarian_marked": true,
+      "is_nonveg_marked": false,
+      "multiple_tables": false,
+      "confidence_notes": []
+    }
+  },
+  {
+    "id": "gummy_bears",
+    "name": "Berry Blast Gummy Chews",
+    "category": "Confectionery / Candy",
+    "image_hint": "Bright red bag of fruit-flavored chew candies",
+    "data": {
+      "product_name": "Berry Blast Fruit Jellies",
+      "table_found": true,
+      "serving_size": {"value": 30.0, "unit": "g"},
+      "servings_per_pack": 3.0,
+      "pack_size": {"value": 90.0, "unit": "g"},
+      "nutrition": {
+        "energy_kcal": 340.0,
+        "protein_g": 5.5,
+        "carbohydrates_g": 78.0,
+        "sugar_g": 54.0,
+        "fat_g": 0.2,
+        "saturated_fat_g": 0.1,
+        "trans_fat_g": 0.0,
+        "fibre_g": 0.0,
+        "sodium_mg": 60.0
+      },
+      "nutrition_basis": "per_100g",
+      "ingredients_raw": "Glucose syrup, Sugar, Gelatin, Acidity regulator (Citric acid), Fruit juice concentrate (Strawberry, Raspberry), Glazing agent (Carnauba wax), Natural color (Carmine - E120)",
+      "ingredients_list": [
+        "glucose syrup",
+        "sugar",
+        "gelatin",
+        "citric acid",
+        "fruit juice concentrate",
+        "carnauba wax",
+        "carmine"
+      ],
+      "allergen_info": null,
+      "is_vegetarian_marked": false,
+      "is_nonveg_marked": true,
+      "multiple_tables": false,
+      "confidence_notes": []
+    }
+  }
+]
