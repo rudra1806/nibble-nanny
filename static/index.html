@@ -11,7 +11,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+  <!-- Favicons & App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="192x192" href="apple-touch-icon.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,10 +23,13 @@
   <header class="app-header">
     <div class="header-container">
       <div class="logo-group">
-        <span class="logo-icon" aria-hidden="true">🍪</span>
+        <img src="logo-mascot.png" alt="Nibble Nanny Mascot" class="brand-logo-img" width="42" height="42">
         <div class="logo-text">
-          <h1 class="logo-title">Nibble Nanny</h1>
-          <span class="logo-badge">Hacktoberfest '26</span>
+          <div class="logo-brand-row">
+            <h1 class="logo-title">Nibble Nanny</h1>
+            <span class="logo-badge">Hacktoberfest '26</span>
+          </div>
+          <span class="logo-subtitle">Your AI Food Safety Guardian</span>
         </div>
       </div>
       <div class="header-right">
@@ -79,7 +86,12 @@
           </div>
           <div id="previewContainer" class="preview-container hidden">
             <img id="imagePreview" src="" alt="Packet label preview">
-            <button id="clearImageBtn" class="clear-btn" title="Remove photo">&times;</button>
+            <button id="clearImageBtn" class="clear-btn" title="Remove photo" aria-label="Remove photo">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -87,7 +99,10 @@
 
     <!-- Loading State -->
     <section id="loadingSection" class="loading-section hidden" aria-live="polite">
-      <div class="loading-spinner"></div>
+      <div class="loading-mascot-wrapper">
+        <img src="logo-mascot.png" alt="Nibble Nanny Scanning" class="loading-mascot-img" width="68" height="68">
+        <div class="loading-radar-ring"></div>
+      </div>
       <h3 id="loadingText" class="loading-title">Scanning with Gemma Vision...</h3>
       <p class="loading-subtext">Running Atwater energy cross-checks & checking the Nibble Nanny Squad rules</p>
     </section>
@@ -204,9 +219,9 @@
 
       <!-- Disclaimer Footer -->
       <div class="disclaimer-card">
-        <span class="disclaimer-icon">ℹ️</span>
+        <img src="logo-mascot.png" alt="Nibble Nanny" class="disclaimer-mascot-img" width="30" height="30">
         <p>
-          <strong>Disclaimer:</strong> Nibble Nanny is an open-source educational companion for Hacktoberfest. It does not replace professional medical advice or clinical allergy testing. Always verify with manufacturers for anaphylactic allergies.
+          <strong>Disclaimer:</strong> Nibble Nanny is an open-source educational companion for Hacktoberfest 2026. It does not replace professional medical advice or clinical allergy testing. Always verify with manufacturers for anaphylactic allergies.
         </p>
       </div>
     </section>
