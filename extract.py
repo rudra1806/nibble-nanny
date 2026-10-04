@@ -129,10 +129,11 @@ def extract_with_ollama(
 def extract_with_gemini_api(image_bytes: bytes, api_key: str) -> Optional[Dict[str, Any]]:
     """Calls Google AI Studio Gemini API for multimodal vision extraction."""
     models_to_try = [
-        "gemini-1.5-flash",
-        "gemini-1.5-flash-latest",
-        "gemini-2.0-flash",
-        "gemini-1.5-pro"
+        "gemini-flash-lite-latest",
+        "gemini-flash-latest",
+        "gemini-3.8-flash",
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite"
     ]
     b64_img = base64.b64encode(image_bytes).decode("utf-8")
 
@@ -157,7 +158,7 @@ def extract_with_gemini_api(image_bytes: bytes, api_key: str) -> Optional[Dict[s
                     "response_mime_type": "application/json"
                 }
             }
-            res = requests.post(url, json=payload, timeout=40)
+            res = requests.post(url, json=payload, timeout=15)
             if res.status_code == 200:
                 result = res.json()
                 candidates = result.get("candidates") or []
