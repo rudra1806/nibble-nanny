@@ -79,8 +79,15 @@ Photo Upload / Camera
                        (Verdict Matrix + Educational Cards + Tricks Badges)
 ```
 
-### 1. Layer 1: The Eyes (Gemma 3 Vision)
-Reading a curved, glossy foil chip bag with lighting glares and irregular typography is a task no classical OCR regex can solve reliably. **Gemma 3 Vision** is the AI at the core: it analyzes packaging photos and outputs structured JSON conforming to a strict schema with nullable types, unit definitions, and Indian vegetarian dot indicators.
+### 1. Layer 1: The Eyes (Google Gemma Open-Weights Perceptual Core)
+Reading a curved, glossy foil chip bag with lighting glares, micro-typography, and regional Indian language marks is a challenge no classical OCR regex can solve reliably.
+
+We specifically built Nibble Nanny on **Google's Open-Weights Gemma family** (`Gemma 4 26B MoE` and `Gemma 3 Vision`):
+- **100% Open Weights & Privacy**: Users' private dietary records and allergy profiles never get locked behind proprietary black-box APIs.
+- **Dual-Mode Deployment**:
+  1. **Local & On-Device**: Can run completely offline on Apple Silicon / local laptops via Ollama (`gemma3:4b`), providing 100% data sovereignty in supermarket basements with zero cellular reception.
+  2. **Cloud Open Inference**: For lightweight web deployments, Nibble Nanny interfaces with Google AI Studio's open-weights **`gemma-4-26b-a4b-it`** (26B Mixture-of-Experts with Active 4B tokens) for deep perceptual reasoning and schema fidelity.
+- **Strict Structured JSON Schema**: Converts distorted packaging into nullable JSON with unit definitions, multi-table tracking, and FSSAI dietary dot recognition.
 
 ### 2. Layer 2: The Trust Gate (Why the Brain is Code, Not LLM Probabilities)
 Here is the defining architectural decision of this project: **Never let a probabilistic language model make life-or-death dietary decisions.**
@@ -149,7 +156,7 @@ I tested Nibble Nanny across real Indian and international supermarket packaging
 
 ## 🏆 Prize Categories
 
-- **Best Use of Gemma ($200)**: Gemma 3 Vision functions as the perceptual core, extracting structured tabular and textual schemas from imperfect packaging photos.
+- **Best Use of Gemma ($200)**: Google's Open-Weights Gemma family (Gemma 4 26B MoE & Gemma 3 Vision) functions as the perceptual core, extracting structured tabular and textual schemas from imperfect packaging photos with 100% open-weights reproducibility.
 - **Best Use of Render ($200)**: Deployed as a containerized web service using Docker and a `render.yaml` blueprint with automated healthcheck monitoring.
 - **Best Use of GitHub Copilot ($100)**: Accelerated the construction of comprehensive test suites and medical alias lists.
 
