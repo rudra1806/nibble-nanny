@@ -94,39 +94,40 @@ LLMs hallucinate numbers, misread tiny tables, and suffer attention drift. If a 
 
 Instead, I designed a **hybrid neuro-symbolic pipeline** where open-weights AI does what it excels at (perceiving the messy physical world), while deterministic, peer-reviewed Python code enforces the safety rules.
 
-```
-       [ Packaging Photo / Camera Snap ]
-                       │
-                       ▼
- ┌───────────────────────────────────────────────┐
- │   LAYER 1: EYES (Google Gemma Vision Open)    │
- │   Perceives warped packaging, curved foil,    │
- │   bilingual text & FSSAI green/red dots       │
- └───────────────────────┬───────────────────────┘
-                         │ Structured Raw JSON
-                         ▼
- ┌───────────────────────────────────────────────┐
- │   LAYER 2: TRUST GATE (validate.py)           │
- │   Atwater Energy Cross-Check:                 │
- │   Energy = (4 × C) + (4 × P) + (9 × F) + (2 × Fib) │
- │   Catches misprints & table hallucinations    │
- └───────────────────────┬───────────────────────┘
-                         │ Sanitized Values
-         ┌───────────────┼───────────────┐
-         ▼               ▼               ▼
- ┌───────────────┐┌───────────────┐┌───────────────┐
- │ LAYER 3:      ││ LAYER 4A:     ││ LAYER 4B:     │
- │ SQUAD RULES   ││ DECEPTION     ││ INGREDIENT    │
- │ (rules.py)    ││ RADAR         ││ CLASSROOM     │
- │ Sneha (Dairy) ││ (tricks.py)   ││ (educate.py)  │
- │ Priya (Sugar) ││ 12 Marketing  ││ 120+ Curated  │
- │ Rahul (Salt)  ││ Loopholes &   ││ Body-Impact   │
- │ Amit (Karma)  ││ Toxins Caught ││ Explanations  │
- └───────┬───────┘└───────┬───────┘└───────┬───────┘
-         └───────────────┼───────────────┘
-                         ▼
-           [ Mobile-First Reactive UI ]
-           Instant verdicts in < 15ms
+```mermaid
+flowchart TD
+    A["📸 Packaging Photo / Camera Snap"] --> B["👁️ Layer 1: The Eyes (Google Gemma Vision Open AI)"]
+    
+    B -->|"Structured Raw JSON"| C["🛡️ Layer 2: The Trust Gate (validate.py)"]
+    
+    subgraph GATE["Deterministic Mathematical Verification"]
+        C --> C1["Atwater Energy Equation: 4C + 4P + 9F + 2Fiber"]
+        C --> C2["Unit Conversions: kJ to kcal, Sodium to Salt"]
+        C --> C3["Impossibility Bounds: Macronutrient sum <= 100g"]
+    end
+    
+    C1 & C2 & C3 -->|"Sanitized Values"| D["🦸 Layer 3: Squad Rules Engine (rules.py)"]
+    C1 & C2 & C3 -->|"Sanitized Values"| E["🕵️ Layer 4A: Deception Radar (tricks.py)"]
+    C1 & C2 & C3 -->|"Sanitized Values"| F["🎓 Layer 4B: Ingredient Classroom (educate.py)"]
+    
+    subgraph SQUAD["The 4 Friend Guardians"]
+        D --> D1["🥛 Sneha: Lactose & Casein Free"]
+        D --> D2["🍬 Priya: Blood Glucose & Sugar Caps"]
+        D --> D3["🧂 Rahul: Sodium & Hypertension"]
+        D --> D4["🌱 Amit: Jain Dietary Purity"]
+    end
+    
+    subgraph WATCHDOG["Nanny Noir Watchdog"]
+        E --> E1["12 Deception Detectors<br/>Sugar Splitting, 0g Trans Fat, Benzene Cocktail"]
+    end
+
+    subgraph TEACHER["Educational Knowledge Base"]
+        F --> F1["120+ Curated Ingredients<br/>Plain-English body-impact & purpose"]
+    end
+    
+    D1 & D2 & D3 & D4 --> G["📱 Mobile-First Visual Verdict Matrix<br/>Instant verdicts in < 15ms"]
+    E1 --> G
+    F1 --> G
 ```
 
 ### 1. Layer 1: The Eyes (Google Gemma Open-Weights Perceptual Core)
