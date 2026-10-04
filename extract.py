@@ -127,9 +127,8 @@ def extract_with_ollama(
 def extract_with_gemini_api(image_bytes: bytes, api_key: str) -> Optional[Dict[str, Any]]:
     """Calls Google AI Studio Gemini API for multimodal vision extraction."""
     models_to_try = [
-        "gemma-4-26b-a4b-it",       # Google Open-Weights Gemma 4 (26B MoE Multimodal)
-        "gemma-4-31b-it",           # Google Open-Weights Gemma 4 (31B Dense Multimodal)
-        "gemini-flash-lite-latest",  # Edge fallback for low-resource server environments
+        "gemma-4-26b-a4b-it",       # Google Open-Weights Gemma 4 (26B MoE Multimodal Vision)
+        "gemini-flash-lite-latest",  # High-throughput Edge fallback for sub-3s responsiveness
         "gemini-flash-latest"
     ]
     b64_img = base64.b64encode(image_bytes).decode("utf-8")
