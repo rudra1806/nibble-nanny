@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nibble Nanny 🍪 — Built for a Friend | Hacktoberfest 2026</title>
+  <meta name="description" content="Snap a food label and get instant personalized verdicts for Dairy Nanny (Sneha), Sugar Nanny (Priya), Salt Nanny (Rahul), and Karma Nanny (Amit), plus Nanny Noir's Corporate Deception Radar.">
+  <meta name="theme-color" content="#F59E0B">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-group">
+        <span class="logo-icon" aria-hidden="true">🍪</span>
+        <div class="logo-text">
+          <h1 class="logo-title">Nibble Nanny</h1>
+          <span class="logo-badge">Hacktoberfest '26</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="tagline-pill">Build for a Friend</span>
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Hero / Pitch Banner -->
+    <section class="hero-section">
+      <div class="hero-copy">
+        <div class="squad-callout">Meet the <strong>Nibble Nanny Squad</strong> 🦸‍♀️</div>
+        <h2 class="hero-heading">One Label Photo.<br><span class="highlight-text">Four Friends Protected.</span></h2>
+        <p class="hero-subtext">
+          Sneha can't have dairy. Priya watches sugar spikes. Rahul manages blood pressure. Amit follows Jain dietary purity.
+          <strong>Nibble Nanny</strong> reads the packet, exposes corporate label tricks, and explains what's inside.
+        </p>
+      </div>
+
+      <!-- Quick Sample Packets Runner -->
+      <div class="samples-card">
+        <div class="samples-header">
+          <span class="samples-title">⚡ Try Instant Test Packets (1-Click Demo)</span>
+          <span class="samples-sub">No camera needed to test!</span>
+        </div>
+        <div id="samplesList" class="samples-grid">
+          <!-- Dynamically populated sample buttons -->
+          <div class="sample-skeleton">Loading snack presets...</div>
+        </div>
+      </div>
+
+      <!-- Upload / Camera Dropzone -->
+      <div class="upload-container">
+        <div id="dropzone" class="dropzone-box" role="region" aria-label="Photo Upload Area">
+          <input type="file" id="fileInput" accept="image/*" class="file-input-hidden" aria-label="Upload packaging photo">
+          <div class="dropzone-content">
+            <div class="camera-icon-circle">
+              <span class="camera-emoji">📸</span>
+            </div>
+            <h3 class="dropzone-title">Snap or Drop a Food Label</h3>
+            <p class="dropzone-desc">Take a clear photo of the back nutrition table & ingredients list</p>
+            <div class="upload-action-buttons">
+              <button id="browseBtn" class="btn btn-primary">
+                <span>📁 Upload Photo</span>
+              </button>
+              <button id="cameraBtn" class="btn btn-secondary">
+                <span>📷 Open Camera</span>
+              </button>
+            </div>
+          </div>
+          <div id="previewContainer" class="preview-container hidden">
+            <img id="imagePreview" src="" alt="Packet label preview">
+            <button id="clearImageBtn" class="clear-btn" title="Remove photo">&times;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <section id="loadingSection" class="loading-section hidden" aria-live="polite">
+      <div class="loading-spinner"></div>
+      <h3 id="loadingText" class="loading-title">Scanning with Gemma 3 Vision...</h3>
+      <p class="loading-subtext">Running Atwater energy cross-checks & checking the Nibble Nanny Squad rules</p>
+    </section>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner hidden" role="alert">
+      <span class="error-icon">⚠️</span>
+      <div id="errorMessage" class="error-text">An error occurred.</div>
+      <button id="closeErrorBtn" class="error-close-btn">&times;</button>
+    </div>
+
+    <!-- Results Section -->
+    <section id="resultsSection" class="results-section hidden">
+      <!-- Product Header Bar -->
+      <div class="product-banner">
+        <div class="product-meta">
+          <span class="product-tag">Analyzed Snack</span>
+          <h2 id="productTitle" class="product-name">Product Name</h2>
+          <div id="productPills" class="product-pills">
+            <span id="vegPill" class="badge badge-veg">● Vegetarian</span>
+            <span id="servingPill" class="badge badge-info">Serving: 25g</span>
+            <span id="packPill" class="badge badge-info">Pack: 100g (4 servings)</span>
+          </div>
+        </div>
+        <div class="product-actions">
+          <button id="rescanBtn" class="btn btn-outline btn-sm">↺ Scan Another</button>
+        </div>
+      </div>
+
+      <!-- HERO MATRIX: THE NIBBLE NANNY SQUAD VERDICTS -->
+      <div class="section-block">
+        <div class="section-title-row">
+          <h3 class="section-heading">
+            <span class="icon">🦸‍♀️</span> The Nibble Nanny Squad Verdicts
+          </h3>
+          <span class="section-sub">One photo evaluated for 4 distinct dietary requirements</span>
+        </div>
+
+        <div id="verdictsGrid" class="verdicts-grid">
+          <!-- Dynamically populated 4 Squad Cards -->
+        </div>
+      </div>
+
+      <!-- WATCHDOG SECTION: NANNY NOIR'S DECEPTION RADAR -->
+      <div class="section-block watchdog-block">
+        <div class="section-title-row">
+          <h3 class="section-heading">
+            <span class="icon">🕵️‍♀️</span> Nanny Noir's Corporate Deception Radar
+          </h3>
+          <span class="section-sub">12 deterministic checks exposing marketing traps, hidden sugars, & chemical cocktails</span>
+        </div>
+
+        <div id="tricksList" class="tricks-list">
+          <!-- Dynamically populated Trick Alerts -->
+        </div>
+      </div>
+
+      <!-- TEACHER SECTION: THE INGREDIENT ENCYCLOPEDIA -->
+      <div class="section-block">
+        <div class="section-title-row">
+          <h3 class="section-heading">
+            <span class="icon">📚</span> The Ingredient Classroom
+          </h3>
+          <span class="section-sub">What each ingredient is and what it actually does to your body</span>
+        </div>
+
+        <!-- Color Legend -->
+        <div class="ingredient-legend">
+          <span class="legend-item"><span class="dot dot-red"></span> Red = Banned for Profile</span>
+          <span class="legend-item"><span class="dot dot-yellow"></span> Yellow = Caution / Ambiguous</span>
+          <span class="legend-item"><span class="dot dot-green"></span> Green = Safe / Nutrient</span>
+          <span class="legend-item"><span class="dot dot-neutral"></span> White = General Info</span>
+        </div>
+
+        <div id="educationList" class="education-grid">
+          <!-- Dynamically populated Ingredient Cards -->
+        </div>
+      </div>
+
+      <!-- TRUST GATE & NUTRITION MATH ACCORDION -->
+      <div class="section-block">
+        <details class="trust-gate-details">
+          <summary class="trust-gate-summary">
+            <span>🛡️ View Trust Gate Math & Raw Nutrition Data</span>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="trust-gate-content">
+            <div id="trustGateStatus" class="trust-status-box"></div>
+            <div class="nutrition-table-container">
+              <table id="nutritionTable" class="nutrition-table">
+                <thead>
+                  <tr>
+                    <th>Nutrient</th>
+                    <th>Per 100g / 100ml</th>
+                    <th>Per Serving</th>
+                    <th>Whole Pack</th>
+                  </tr>
+                </thead>
+                <tbody id="nutritionTableBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Disclaimer Footer -->
+      <div class="disclaimer-card">
+        <span class="disclaimer-icon">ℹ️</span>
+        <p>
+          <strong>Nibble Nanny Medical & Safety Disclaimer:</strong> Nibble Nanny is an open-source consumer advocacy and educational companion created for the Hacktoberfest Weekend Challenge. It does not replace certified professional medical advice, clinical allergy testing, or manufacturer allergen certifications. Always verify with manufacturer hotlines for anaphylactic allergies.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Floating Camera Action Button -->
+  <button id="fabCamera" class="fab-btn" aria-label="Quick Scan Food Label">
+    <span>📸 Scan</span>
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>
