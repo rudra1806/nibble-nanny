@@ -214,4 +214,4 @@ I handed Nibble Nanny over to Sneha, Priya, Rahul, and Amit to test during their
 
 ---
 
-*Built with ❤️ for Sneha, Priya, Rahul, Amit, and everyone who deserves to know the truth behind the label.* 🍪
+*Built with ❤️ for my friends and everyone who deserves to know the truth behind the label.* 🍪
