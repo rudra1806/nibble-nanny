@@ -192,6 +192,19 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
+.gemma-pill {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.1));
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: #2563EB;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .gemma-pill {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(52, 211, 153, 0.15));
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #93C5FD;
+}
+
 @media (max-width: 600px) {
   .tagline-pill { display: none; }
 }

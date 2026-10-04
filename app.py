@@ -122,7 +122,8 @@ def process_label_payload(extracted: dict):
         },
         "verdicts": verdicts_json,
         "tricks": tricks_json,
-        "education": education_json
+        "education": education_json,
+        "source": extracted.get("source")
     }
 
 

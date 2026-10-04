@@ -13,48 +13,37 @@ from typing import Dict, Any, Optional
 from PIL import Image
 import requests
 
-EXTRACTION_SYSTEM_PROMPT = """You are Nibble Nanny's food label reader. You will receive an image of a food product packaging or nutrition label.
-Extract the nutrition table and ingredients EXACTLY as printed.
-
-CRITICAL RULES:
-1. Return ONLY valid JSON adhering strictly to the schema below. No commentary, no preamble.
-2. Use null for any field you cannot clearly read or that is absent from the label. DO NOT GUESS OR ESTIMATE.
-3. If nutrition is given per serving, set "nutrition_basis": "per_serving". If per 100g/ml, set "per_100g".
-4. Split the ingredients into a clean array in "ingredients_list" AND include the full unedited text in "ingredients_raw".
-5. Note Indian dietary dots: "is_vegetarian_marked": true (green dot in green square) or "is_nonveg_marked": true (brown/red dot).
-6. In "confidence_notes", add flags like "curved surface", "glare on packet", or "text partially cut off".
-
-SCHEMA:
+EXTRACTION_SYSTEM_PROMPT = """You are Nibble Nanny's food packaging reader. Extract the nutrition facts and ingredients list from this packaging photo.
+Output strictly a JSON object with this schema:
 {
-  "product_name": "string or null",
-  "table_found": true or false,
-  "serving_size": {"value": number or null, "unit": "g" or "ml" or null},
-  "servings_per_pack": number or null,
-  "pack_size": {"value": number or null, "unit": "g" or "ml" or null},
+  "product_name": null,
+  "table_found": true,
+  "serving_size": {"value": null, "unit": "g"},
+  "servings_per_pack": null,
+  "pack_size": {"value": null, "unit": null},
   "nutrition": {
-    "energy_kcal": number or null,
-    "energy_kj": number or null,
-    "protein_g": number or null,
-    "carbohydrates_g": number or null,
-    "sugar_g": number or null,
-    "added_sugar_g": number or null,
-    "fat_g": number or null,
-    "saturated_fat_g": number or null,
-    "trans_fat_g": number or null,
-    "fibre_g": number or null,
-    "sodium_mg": number or null,
-    "salt_g": number or null
+    "energy_kcal": null,
+    "energy_kj": null,
+    "protein_g": null,
+    "carbohydrates_g": null,
+    "sugar_g": null,
+    "added_sugar_g": null,
+    "fat_g": null,
+    "saturated_fat_g": null,
+    "trans_fat_g": null,
+    "fibre_g": null,
+    "sodium_mg": null,
+    "salt_g": null
   },
-  "nutrition_basis": "per_100g" or "per_serving" or "unclear",
-  "ingredients_raw": "string or null",
-  "ingredients_list": ["string"],
-  "allergen_info": "string or null",
-  "is_vegetarian_marked": true or false or null,
-  "is_nonveg_marked": true or false or null,
-  "multiple_tables": false,
+  "nutrition_basis": "per_100g",
+  "ingredients_raw": "full unedited ingredients text",
+  "ingredients_list": ["ingredient 1", "ingredient 2"],
+  "allergen_info": null,
+  "is_vegetarian_marked": null,
+  "is_nonveg_marked": null,
   "confidence_notes": []
 }
-"""
+Output only the valid JSON block."""
 
 
 def preprocess_image(image_bytes: bytes, max_dimension: int = 1024) -> bytes:
@@ -81,23 +70,32 @@ def preprocess_image(image_bytes: bytes, max_dimension: int = 1024) -> bytes:
 
 
 def clean_json_response(raw_text: str) -> Optional[Dict[str, Any]]:
-    """Extracts and parses JSON object from model output, handling markdown blocks."""
+    """Extracts and parses JSON object from model output, handling thinking chains and markdown blocks."""
     if not raw_text:
         return None
 
     cleaned = raw_text.strip()
-    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", cleaned, re.DOTALL)
-    if match:
-        cleaned = match.group(1)
-    else:
-        # Fallback regex for first { to last }
-        match_brace = re.search(r"(\{.*\})", cleaned, re.DOTALL)
-        if match_brace:
-            cleaned = match_brace.group(1)
+    
+    # 1. Look for ```json ... ``` or ``` ... ``` blocks
+    matches = re.findall(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned)
+    for m in reversed(matches):
+        try:
+            return json.loads(m.strip())
+        except Exception:
+            pass
 
+    # 2. Look for the largest outer { ... } block
+    brace_match = re.search(r"(\{[\s\S]*\})", cleaned)
+    if brace_match:
+        try:
+            return json.loads(brace_match.group(1).strip())
+        except Exception:
+            pass
+
+    # 3. Direct parse
     try:
         return json.loads(cleaned)
-    except json.JSONDecodeError as e:
+    except Exception as e:
         print(f"JSON parse error on model response: {e}")
         return None
 
@@ -129,11 +127,10 @@ def extract_with_ollama(
 def extract_with_gemini_api(image_bytes: bytes, api_key: str) -> Optional[Dict[str, Any]]:
     """Calls Google AI Studio Gemini API for multimodal vision extraction."""
     models_to_try = [
-        "gemini-flash-lite-latest",
-        "gemini-flash-latest",
-        "gemini-3.8-flash",
-        "gemini-3.5-flash",
-        "gemini-3.1-flash-lite"
+        "gemma-4-26b-a4b-it",       # Google Open-Weights Gemma 4 (26B MoE Multimodal)
+        "gemma-4-31b-it",           # Google Open-Weights Gemma 4 (31B Dense Multimodal)
+        "gemini-flash-lite-latest",  # Edge fallback for low-resource server environments
+        "gemini-flash-latest"
     ]
     b64_img = base64.b64encode(image_bytes).decode("utf-8")
 
@@ -154,11 +151,11 @@ def extract_with_gemini_api(image_bytes: bytes, api_key: str) -> Optional[Dict[s
                     ]
                 }],
                 "generationConfig": {
-                    "temperature": 0.1,
-                    "response_mime_type": "application/json"
+                    "temperature": 0.1
                 }
             }
-            res = requests.post(url, json=payload, timeout=15)
+            timeout_sec = 25 if "gemma" in model_name else 12
+            res = requests.post(url, json=payload, timeout=timeout_sec)
             if res.status_code == 200:
                 result = res.json()
                 candidates = result.get("candidates") or []
